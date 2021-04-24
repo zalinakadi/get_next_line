@@ -1,35 +1,25 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: eproveme <eproveme@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/11 22:33:44 by eproveme          #+#    #+#             */
-/*   Updated: 2020/12/16 16:47:30 by eproveme         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-int				ft_free(char *buff, int i)
+int	ft_free(char *buff, int i)
 {
 	free(buff);
 	buff = NULL;
 	return (i);
 }
 
-int				ft_rmd(char *rmd, char **line)
+int	ft_rmd(char *rmd, char **line)
 {
 	char	*ind;
 
 	ind = NULL;
 	if (rmd)
 	{
-		if ((ind = ft_strchr(rmd, '\n')))
+		ind = ft_strchr(rmd, '\n');
+		if (ind)
 		{
 			*ind = '\0';
-			if (!(*line = ft_strdup(rmd)))
+			*line = ft_strdup(rmd);
+			if (!*line)
 				return (-1);
 			ind++;
 			ft_strcpy(rmd, ind);
@@ -39,20 +29,22 @@ int				ft_rmd(char *rmd, char **line)
 	return (0);
 }
 
-int				ft_line(char *ind, char **line, char **rmd, char *buff)
+int	ft_line(char *ind, char **line, char **rmd, char *buff)
 {
 	*ind = '\0';
 	ind++;
-	if (!(*line = ft_strjoin(*rmd, buff)))
+	*line = ft_strjoin(*rmd, buff);
+	if (!*line)
 		return (ft_free(buff, -1));
 	free(*rmd);
 	*rmd = NULL;
-	if (!(*rmd = ft_strjoin(*rmd, ind)))
+	*rmd = ft_strjoin(*rmd, ind);
+	if (!*rmd)
 		return (ft_free(buff, -1));
 	return (ft_free(buff, 1));
 }
 
-int				ft_read(int fd, char **line, char *buff)
+int	ft_read(int fd, char **line, char *buff)
 {
 	static char	*rmd;
 	char		*ind;
@@ -81,7 +73,7 @@ int				ft_read(int fd, char **line, char *buff)
 	return (ft_free(buff, 0));
 }
 
-int				get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	char		*buff;
 
